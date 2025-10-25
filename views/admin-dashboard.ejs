@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - GMC Panel</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>⚙️ Admin Dashboard</h1>
+    </div>
+
+    <div class="admin-section">
+      <h2>Users Management</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(user => { %>
+          <tr>
+            <td><%= user.id %></td>
+            <td><%= user.username %></td>
+            <td><%= user.email %></td>
+            <td><span class="role-badge"><%= user.role %></span></td>
+            <td><%= new Date(user.created_at).toLocaleDateString() %></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="admin-section">
+      <h2>All Servers</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Owner</th>
+            <th>Port</th>
+            <th>Memory</th>
+            <th>Status</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% servers.forEach(server => { %>
+          <tr>
+            <td><%= server.id %></td>
+            <td><a href="/servers/<%= server.id %>"><%= server.name %></a></td>
+            <td><%= server.username %></td>
+            <td><%= server.port %></td>
+            <td><%= server.memory %> MB</td>
+            <td><span class="status-badge status-<%= server.status %>"><%= server.status %></span></td>
+            <td><%= server.server_type %></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

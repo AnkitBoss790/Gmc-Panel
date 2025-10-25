@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Servers - GMC Panel</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>My Servers</h1>
+      <a href="/servers/create" class="btn-primary">➕ Create New Server</a>
+    </div>
+
+    <% if (servers.length === 0) { %>
+      <div class="empty-state">
+        <div class="empty-icon">📦</div>
+        <h2>No servers yet</h2>
+        <p>Create your first Minecraft server to get started!</p>
+        <a href="/servers/create" class="btn-primary">Create Server</a>
+      </div>
+    <% } else { %>
+      <div class="servers-grid">
+        <% servers.forEach(server => { %>
+          <div class="server-card">
+            <div class="server-header">
+              <h3><%= server.name %></h3>
+              <span class="status-badge status-<%= server.status %>">
+                <%= server.status %>
+              </span>
+            </div>
+            
+            <div class="server-info">
+              <div class="info-item">
+                <span class="label">Port:</span>
+                <span class="value"><%= server.port %></span>
+              </div>
+              <div class="info-item">
+                <span class="label">Memory:</span>
+                <span class="value"><%= server.memory %> MB</span>
+              </div>
+              <div class="info-item">
+                <span class="label">Type:</span>
+                <span class="value"><%= server.server_type %></span>
+              </div>
+            </div>
+
+            <div class="server-actions">
+              <a href="/servers/<%= server.id %>" class="btn-secondary">Manage</a>
+              <% if (server.status === 'stopped') { %>
+                <button onclick="startServer(<%= server.id %>)" class="btn-success">Start</button>
+              <% } else { %>
+                <button onclick="stopServer(<%= server.id %>)" class="btn-danger">Stop</button>
+              <% } %>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+
+  <script>
+    async function startServer(id) {
+      try {
+        const res = await fetch(`/servers/${id}/start`, { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          location.reload();
+        }
+      } catch (error) {
+        alert('Error starting server');
+      }
+    }
+
+    async function stopServer(id) {
+      try {
+        const res = await fetch(`/servers/${id}/stop`, { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          location.reload();
+        }
+      } catch (error) {
+        alert('Error stopping server');
+      }
+    }
+  </script>
+</body>

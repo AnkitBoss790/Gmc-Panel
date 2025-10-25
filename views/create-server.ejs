@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Server - GMC Panel</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>Create New Server</h1>
+    </div>
+
+    <div class="form-container">
+      <form id="createServerForm">
+        <div class="form-group">
+          <label for="name">Server Name</label>
+          <input type="text" id="name" name="name" required placeholder="My Minecraft Server">
+        </div>
+
+        <div class="form-group">
+          <label for="port">Server Port</label>
+          <input type="number" id="port" name="port" required placeholder="3002" min="3002" max="65535">
+          <small>Available ports: 3002, 3003, 3004, etc.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="memory">Memory Allocation (MB)</label>
+          <input type="number" id="memory" name="memory" required placeholder="1024" min="512" max="16384" step="256">
+          <small>Recommended: 1024 MB or higher</small>
+        </div>
+
+        <div class="form-group">
+          <label for="serverType">Server Type</label>
+          <select id="serverType" name="serverType" required>
+            <option value="minecraft">Minecraft (Java Edition)</option>
+            <option value="bedrock">Minecraft Bedrock</option>
+            <option value="forge">Minecraft Forge</option>
+            <option value="spigot">Spigot</option>
+            <option value="paper">Paper</option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Create Server</button>
+          <a href="/servers" class="btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('createServerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = {
+        name: document.getElementById('name').value,
+        port: document.getElementById('port').value,
+        memory: document.getElementById('memory').value,
+        serverType: document.getElementById('serverType').value
+      };
+
+      try {
+        const response = await fetch('/servers/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          alert('Server created successfully!');
+          window.location.href = '/servers';
+        } else {
+          alert('Error: ' + (data.error || 'Failed to create server'));
+        }
+      } catch (error) {
+        alert('Error creating server: ' + error.message);
+      }
+    });
+  </script>
+</body>
+</html>

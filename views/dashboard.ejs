@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - GMC Panel</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <div class="container">
+    <div class="welcome-section">
+      <h1>Welcome back, <%= user.username %>! 👋</h1>
+      <p>Manage your Minecraft servers from this dashboard</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">🖥️</div>
+        <div class="stat-info">
+          <h3>Total Servers</h3>
+          <p class="stat-value" id="totalServers">Loading...</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-info">
+          <h3>Running</h3>
+          <p class="stat-value" id="runningServers">Loading...</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">⏸️</div>
+        <div class="stat-info">
+          <h3>Stopped</h3>
+          <p class="stat-value" id="stoppedServers">Loading...</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">💾</div>
+        <div class="stat-info">
+          <h3>Total Memory</h3>
+          <p class="stat-value" id="totalMemory">Loading...</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <h2>Quick Actions</h2>
+      <div class="actions-grid">
+        <a href="/servers/create" class="action-btn">
+          <span>➕</span>
+          <span>Create Server</span>
+        </a>
+        <a href="/servers" class="action-btn">
+          <span>📋</span>
+          <span>View All Servers</span>
+        </a>
+        <% if (user.role === 'admin') { %>
+        <a href="/admin/dashboard" class="action-btn">
+          <span>⚙️</span>
+          <span>Admin Panel</span>
+        </a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Load dashboard stats
+    fetch('/api/servers/stats')
+      .then(res => res.json())
+      .catch(() => {
+        // Default values if API fails
+        document.getElementById('totalServers').textContent = '0';
+        document.getElementById('runningServers').textContent = '0';
+        document.getElementById('stoppedServers').textContent = '0';
+        document.getElementById('totalMemory').textContent = '0 MB';
+      });
+  </script>
+</body>
+</html>
