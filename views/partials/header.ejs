@@ -1,0 +1,18 @@
+<header class="header">
+  <div class="header-content">
+    <div class="logo">
+      <a href="/dashboard">🎮 GMC Panel</a>
+    </div>
+    <nav class="nav">
+      <a href="/dashboard">Dashboard</a>
+      <a href="/servers">Servers</a>
+      <% if (user.role === 'admin') { %>
+      <a href="/admin/dashboard">Admin</a>
+      <% } %>
+      <div class="user-menu">
+        <span class="user-name"><%= user.username %></span>
+        <a href="/auth/logout" class="logout-btn">Logout</a>
+      </div>
+    </nav>
+  </div>
+</header>
